@@ -1,0 +1,79 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/">
+    <Button name="FactionBalanceMinimapButton" parent="Minimap" frameStrata="LOW" frameLevel="8" enableMouse="true" movable="true" clampedToScreen="true">
+        <Size>
+            <AbsDimension x="27" y="27"/>
+        </Size>
+        <Anchors>
+            <Anchor point="TOPLEFT" relativeTo="Minimap">
+                <Offset>
+                    <AbsDimension x="-25" y="-60"/>
+                </Offset>
+            </Anchor>
+        </Anchors>
+        <Layers>
+            <Layer level="BACKGROUND">
+                <Texture name="$parentIcon" file="Interface\AddOns\GM_FULL\wow_store">
+                    <Size>
+                        <AbsDimension x="27" y="27"/>
+                    </Size>
+                    <Anchors>
+                        <Anchor point="CENTER"/>
+                    </Anchors>
+                </Texture>
+            </Layer>
+            <Layer level="OVERLAY">
+                <Texture name="$parentBorder" file="Interface\Minimap\MiniMap-TrackingBorder">
+                    <Size>
+                        <AbsDimension x="46" y="46"/>
+                    </Size>
+                    <Anchors>
+                        <Anchor point="TOPLEFT"/>
+                    </Anchors>
+                </Texture>
+            </Layer>
+        </Layers>
+        <HighlightTexture alphaMode="ADD" file="Interface\Minimap\UI-Minimap-ZoomButton-Highlight"/>
+        <Scripts>
+            <OnLoad>
+                this:RegisterForClicks("LeftButtonUp", "RightButtonUp", "MiddleButtonUp");
+                this:RegisterForDrag("RightButton");
+                this:SetClampedToScreen(true);
+            </OnLoad>
+            <OnClick>
+                if (button == "LeftButton") then
+                    if (FactionBalanceFrame:IsShown()) then
+                        FactionBalanceFrame:Hide();
+                    else
+                        FactionBalanceFrame:Show();
+                    end
+                end
+            </OnClick>
+            <OnEnter>
+                GameTooltip:SetOwner(this, "ANCHOR_LEFT");
+                GameTooltip:SetText("Faction Balance");
+                GameTooltip:AddLine("ЛКМ - Показать/Скрыть окно");
+                GameTooltip:AddLine("ПКМ - Переместить кнопку");
+                GameTooltip:Show();
+            </OnEnter>
+            <OnLeave>
+                GameTooltip:Hide();
+            </OnLeave>
+            <OnDragStart>
+                this:StartMoving();
+                GameTooltip:Hide();
+            </OnDragStart>
+            <OnDragStop>
+                this:StopMovingOrSizing();
+                local angle = math.atan2(Minimap:GetCenter());
+                this:SetPoint("TOPLEFT", Minimap, "TOPLEFT", 
+                    math.cos(angle) * 80, 
+                    math.sin(angle) * 80);
+                
+                FactionBalanceDB = FactionBalanceDB or {};
+                FactionBalanceDB.minimap = {
+                    angle = angle
+                };
+            </OnDragStop>
+        </Scripts>
+    </Button>
+</Ui> 
