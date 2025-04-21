@@ -1,0 +1,8 @@
+## Interface: 100200
+## Title: Faction Balance
+## Notes: Shows the balance between Alliance and Horde players online
+## Author: KATSUMI EXPLOSN
+## Version: 1.0.3 R1
+## SavedVariables: FactionBalanceDB
+
+FactionBalance.lua 
